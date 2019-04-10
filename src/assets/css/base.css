@@ -8,6 +8,7 @@
 }
 
 html {
+  backface-visibility: hidden;  
   font-family:sans-serif,"\5FAE\8F6F\96C5\9ED1",arial;
   font-size: 100%;
   -ms-text-size-adjust: 100%;

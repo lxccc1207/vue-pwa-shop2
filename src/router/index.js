@@ -32,11 +32,6 @@ export default new Router({
       component: Contact
     },
     {
-      path: '/',
-      name: 'GoodsList',
-      component: GoodsList
-    },
-    {
       path: '/goodsdetails',
       name: 'GoodsDetails',
       component: GoodsDetails

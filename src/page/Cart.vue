@@ -165,7 +165,7 @@ import axios from 'axios'
           this.getCartNum();
         },
         computed:{
-          checkAllFlag() {
+          checkAllFlag() { // 选择数量等于购物车长度表示全选，返回true；否则为false（未全选）
             return this.selectedCount === this.cartList.length;
           },
           selectedCount() {
@@ -210,16 +210,16 @@ import axios from 'axios'
             });
           },
           changeMoney(product, flag){
-            if(flag === 1){
+            if(flag === 1){ // 增加商品数量
               product.productNum++;
-            }else if(flag === -1) {
+            }else if(flag === -1) { //减商品数量
               if(product.productNum>1) {
                 product.productNum--;
               }else {
                 product.productNum = 1;
               }
-            } else{
-              product.checked = product.checked=='1'?'0':'1';
+            } else{ // flag===2 列表前圆圈，点击选中
+              product.checked = product.checked=='1'?'0':'1'; // ???
             }
             var param = {
               productId:product.productId,
@@ -244,6 +244,7 @@ import axios from 'axios'
             var param = {
               checked:flag===true?'1':'0'
             };
+            // 全选购物车商品
             axios.get('/api/users/editSelectAll', {
               params:param
             }).then((res) => {
@@ -294,6 +295,7 @@ import axios from 'axios'
               }
             });
           },
+          // 结算
           checkOut() {
             if(this.selectedCount>0) {
               this.$router.push({

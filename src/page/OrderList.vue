@@ -3,7 +3,7 @@
     <y-shelf title="我的订单">
       <div slot="content" style="min-height:300px;">
         <div v-if="orderList.length" style="min-height: 10vw; border-bottom:1px solid #ededed;">
-          <div v-for="(item,index) in orderList" :key="i">
+          <div v-for="(item,index) in orderList" :key="index">
             <div class="gray-sub-title cart-title">
               <div class="first">
                 <div>
@@ -23,8 +23,8 @@
               </div>
             </div>
             <div class="pr" style="position:relative;">
-              <div class="cart" v-for="" :key="j">
-                <div class="cart-l" :class="{bt:j>0}">
+              <div class="cart">
+                <div class="cart-l" :class="bt">
                   <div class="car-l-l">         
                     <div class="img-box"><a><img  v-lazy="`static/${item.productImg}`" alt=""></a></div>
                     <div class="ellipsis"><a style="color: #626262;"></a></div>
@@ -70,7 +70,7 @@
       <p style="font-size:14px; font-weight: 700; text-align:right;">*请注意,付款是不会发货的,视为自动捐赠,请勿轻易付款,该作者承担不起任何责任,谢谢配合!</p>
         <div class="p-title">支付方式</div> 
         <div class="pay-item">
-          <div :class="{'active':selectType === index}" v-for="(item,index) in payList" @click="select(index)" >
+          <div :class="{'active':selectType === index}" v-for="(item,index) in payList" @click="select(index)" :key="index">
             <img :src="item.imgUrl">
           </div> 
         </div>

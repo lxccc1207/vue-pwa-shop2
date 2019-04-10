@@ -10,7 +10,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const manifestPlugin = require('pwa-manifest-webpack-plugin')
 const portfinder = require('portfinder')
-const { SkeletonPlugin } = require('page-skeleton-webpack-plugin')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -88,12 +87,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         from: 'service-worker.js',
         to: 'sw.js'
       }
-    ]),
-    new SkeletonPlugin({
-      pathname: path.resolve(__dirname, './shell'), // 用来存储 shell 文件的地址
-      staticDir: path.resolve(__dirname, './dist'), // 最好和 `output.path` 相同
-      routes: ['/'], // 将需要生成骨架屏的路由添加到数组中
-    })
+    ])
   ]
 })
 

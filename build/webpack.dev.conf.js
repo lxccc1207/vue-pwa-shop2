@@ -8,6 +8,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const workboxPlugin = require('workbox-webpack-plugin')
 const manifestPlugin = require('pwa-manifest-webpack-plugin')
 const portfinder = require('portfinder')
 
@@ -57,6 +58,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true
+    }),
+    new workboxPlugin.InjectManifest({
+      // cacheId: 'goBuy-cache',
+      // skipWaiting: true, // 强制等待中的 Service Worker 被激活
+      // clientsClaim: true, // Service Worker 被激活后使其立即获得页面控制权
+      swSrc: 'service-worker.js',
+      swDest: 'sw.js',
+      globPatterns: ['**/*.{html,js,css,png.jpg}'], // 匹配的文件
     }),
     new manifestPlugin({
       name: '好购商城', // 标题 指定了Web App的名称。

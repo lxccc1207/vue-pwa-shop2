@@ -29,6 +29,7 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerRoute(/.*\.(?:js|css|png|jpg)/, workbox.strategies.cacheFirst(), 'GET');
 workbox.routing.registerRoute(/.*\.html/, workbox.strategies.networkFirst(), 'GET');
+workbox.routing.registerRoute(/(.*)list(.*)/g, workbox.strategies.cacheFirst(), 'GET');
 
 self.addEventListener('push', function (event) { 
   console.log('测试push')

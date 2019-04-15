@@ -28,14 +28,23 @@
             </div>
             <div class="table-right">
                 <span class="table-right-span">留言表单</span>
-                <form class="table-right-form">
-                    <input type="text" v-model="userName" placeholder="姓名">
-                    <input type="text" v-model="email" placeholder="邮箱">
-                    <input type="text" v-model="phone" placeholder="电话">
-                    <input type="text" v-model="suggest" placeholder="建议">
-                    <textarea v-model="content" cols="75" rows="10">写下你想说的...</textarea>
-                    <input class="submit" type="submit" @click="submit" value="提交">
-                </form>
+                <el-form class="table-right-form" ref="form" :model="form" label-width="80px">
+                  <el-form-item label="姓名">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="邮箱">
+                    <el-input v-model="form.email"></el-input>
+                  </el-form-item>
+                  <el-form-item label="电话">
+                    <el-input v-model="form.phone"></el-input>
+                  </el-form-item>
+                  <el-form-item label="建议">
+                    <el-input type="textarea" :rows="10" v-model="form.suggest"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="onSubmit">提交</el-button>
+                  </el-form-item>
+                </el-form>
             </div>
         </div>
     </div> 
@@ -43,15 +52,17 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
     name:'About',
     data () {
       return {
-      userName:'',
-      email:'',
-      phone:'',
-      suggest:'',
-      content:''
+        form: {
+          name:'',
+          email:'',
+          phone:'',
+          suggest:''
+        }
       }
     },
     computed: {
@@ -60,9 +71,18 @@
      
     },
     methods: {
-      submit(){
-        alert("感谢您的留言！")
-        return
+      onSubmit() {
+        var params = {
+          name: this.form.name,
+          email: this.form.email,
+          phone: this.form.phone,
+          suggest: this.form.suggest
+        }
+        axios.post('/api/leaveMsg', params).then(res => {
+          alert(res.data.msg)
+        }).catch(r => {
+          console.log(r)
+        })  
       }  
     }
   
@@ -119,6 +139,9 @@
   width:500px
   flex:1
   position :relative
+  @media screen and (min-width :1023px){
+    padding-left:60px
+  }
   @media screen and (max-width :1023px){
     min-height :660px
     margin:0 auto
@@ -127,11 +150,18 @@
     position :absolute
     top:20px
     left:10px
+    @media screen and (min-width :1023px){
+      left:100px
+    }
     font-size :20px
     font-weight:700
   .table-right-form
     position :absolute
-    top:50px
+    top:65px
+    width:70%
+    @media screen and (max-width :360px){
+      width:50%
+    }
     height:100%
     @media screen and (max-width :1023px){
       display :flex

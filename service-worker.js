@@ -30,17 +30,28 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerRoute(/.*\.(?:js|css|png|jpg)/, workbox.strategies.cacheFirst(), 'GET');
 workbox.routing.registerRoute(/.*\.html/, workbox.strategies.networkFirst(), 'GET');
 workbox.routing.registerRoute(/(.*)list(.*)/g, workbox.strategies.cacheFirst(), 'GET');
+// 后台同步
+const bgSyncPlugin = new workbox.backgroundSync.Plugin('leaveMsg-queue', {
+  maxRetentionTime: 24 * 60 // Retry for max of 24 Hours
+});
 
+workbox.routing.registerRoute(
+  /(.*)leaveMsg(.*)/g,
+  new workbox.strategies.NetworkOnly({
+    plugins: [bgSyncPlugin]
+  }),
+  'POST'
+);
 self.addEventListener('push', function (event) { 
-  console.log('测试push')
-  var data =  event.data.text()
-  var payload = event.data ? JSON.parse(data) : 'no payload'
-  console.log(payload.msg, payload.url)
+  console.log('收到服务端push消息')
+  var payload = event.data ? JSON.parse(event.data.text()) : 'no payload'
+  console.log(payload.msg)
   var title = '好购商城'
   event.waitUntil(
     self.registration.showNotification(title, {
       body: payload.msg,
-      url: payload.url
+      // url: payload.url,
+      icon: './static/phoneIcon.png'
     })
   )
 })

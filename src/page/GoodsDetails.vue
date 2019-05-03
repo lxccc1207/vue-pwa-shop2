@@ -1,16 +1,16 @@
 <!--商品详情-->
 <template>
 <div>
-  <div class="w store-content" v-for="item in goodsList">
+  <div class="w store-content">
     <div ref="gray"  class="gray-box">
       <div class="gallery-wrapper">
         <div ref="gallery" class="gallery">
           <div class="thumbnail">
-            <ul>
-              <li :class="{on:big===1}" @click="big=1">
-                <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
+            <ul v-if="List && List.goodsimages">
+              <li v-for="(item, index) in List.goodsimages" :key="index" :class="{on:big===index}" @click="big=index">
+                <img v-lazy="`static/goodsImages/${item.src}`" :alt="List.goodsList[0].productName">
               </li>
-              <li :class="{on:big===2}" @click="big=2">
+              <!-- <li :class="{on:big===2}" @click="big=2">
                 <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
               </li>
               <li :class="{on:big===3}" @click="big=3">
@@ -21,37 +21,37 @@
               </li>
               <li :class="{on:big===5}" @click="big=5">
                 <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
-              </li>
+              </li> -->
             </ul>
           </div>
           <div class="thumb">
-            <div class="big">
-              <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
+            <div v-if="List && List.goodsList" class="big">
+              <img v-lazy="`static/${List.goodsList[0].productImg}`" :alt="List.goodsList[0].productName">
             </div>
           </div>
         </div>
       </div>
       <!--右边-->
       <div ref="banner" class="banner">
-        <div class="sku-custom-title">
-          <h4>{{item.productDetails}}</h4>
+        <div v-if="List && List.goodsList" class="sku-custom-title">
+          <h4>{{List.goodsList[0].productDetails}}</h4>
           <h6>
-            <span>{{item.sub_title}}</span>
+            <span>{{List.goodsList[0].sub_title}}</span>
             <span class="price">
-              <em>¥</em><i>{{item.productPrice}}</i></span>
+              <em>¥</em><i>{{List.goodsList[0].productPrice}}</i></span>
           </h6>
         </div>
-        <div class="num">
+        <div v-if="List && List.goodsList" class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum" :limit="Number(item.limit_num)"></buy-num>
+          <buy-num @edit-num="editNum" :limit="Number(List.goodsList[0].limit_num)"></buy-num>
         </div>
-        <div class="buy">
+        <div v-if="List && List.goodsList" class="buy">
           <y-button text="加入购物车"
-                    @btnClick="addCart(item)"
+                    @btnClick="addCart(List.goodsList[0])"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
           <y-button text="现在购买"
-                    @btnClick="checkout(item)"
+                    @btnClick="checkout(List.goodsList[0])"
                     style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>
         </div>
       </div>
@@ -63,10 +63,10 @@
           <!-- <div class="img-item">
             <div></div>
           </div> -->
-          <div class="no-info">
-            <img v-lazy="`static/details-img/${item.descImg}`" onclick="return false">
+          <div v-if="List && List.goodsList" class="no-info">
+            <img v-lazy="`static/details-img/${List.goodsList[0].descImg}`" onclick="return false">
             <br>
-            {{item.desc}}
+            {{List.goodsList[0].desc}}
           </div>
         </div>
       </y-shelf>
@@ -94,9 +94,9 @@
   export default {
     data () {
       return {
-        productMsg: {},
+        mainImage: '',
         small: [],
-        goodsList:[],
+        List:[],
         big: 1,
         product: {},
         productNum: 1,
@@ -129,22 +129,24 @@
         }).then((res) => {
           res = res.data;
           if(res.status === '1') {
-            this.goodsList = res.result;
-            console.log(this.goodsList);
+            this.List = res.result;
+            console.log(this.List);
           }
         });
       },
       calHeight(){
         var clientWidth = document.body.clientWidth;
-         console.log("屏幕宽度"+clientWidth)
-        if(clientWidth<1024){
-          var gallery = this.$refs.gallery;
-          var banner = this.$refs.banner;
-          var Height= gallery[0].offsetHeight+banner[0].offsetHeight;
-          // console.log("所求高度"+Height)
-          var gray = this.$refs.gray
-          gray[0].style.height = Height+'px'
-
+        //  console.log("屏幕宽度"+clientWidth)
+        if (clientWidth < 1024) {
+          this.$nextTick(() => {
+            var gallery = this.$refs.gallery;
+            var banner = this.$refs.banner;
+            // console.log(gallery.offsetHeight)
+            var Height= gallery.offsetHeight+banner.offsetHeight;
+            // console.log("所求高度"+Height)
+            var gray = this.$refs.gray
+            gray.style.height = Height+'px'
+          })
         }
       },
       editNum (num) {

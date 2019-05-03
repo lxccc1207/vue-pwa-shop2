@@ -31,8 +31,17 @@ workbox.routing.registerRoute(/.*\.(?:js|css|png|jpg)/, workbox.strategies.cache
 workbox.routing.registerRoute(/.*\.html/, workbox.strategies.networkFirst(), 'GET');
 workbox.routing.registerRoute(/(.*)list(.*)/g, workbox.strategies.cacheFirst(), 'GET');
 // 后台同步
+const NotificationForUser = () => {
+  self.registration.showNotification('留言发送成功', {
+    body: '感谢您的留言！',
+    icon: './static/phoneIcon.png'
+  });
+};
 const bgSyncPlugin = new workbox.backgroundSync.Plugin('leaveMsg-queue', {
-  maxRetentionTime: 24 * 60 // Retry for max of 24 Hours
+  maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
+  callbacks: {
+    queueDidReplay: NotificationForUser // 通知用户
+  }
 });
 
 workbox.routing.registerRoute(

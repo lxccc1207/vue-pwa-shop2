@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <mall-header></mall-header>
-    <mall-bread></mall-bread>
+    <mall-header v-show="$route.path !== '/adminIndex/*'"></mall-header>
+    <mall-bread v-show="$route.name !== '/adminIndex/*'"></mall-bread>
     <router-view></router-view>
-    <mall-footer></mall-footer>
+    <mall-footer v-show="$route.name !== '/adminIndex/*'"></mall-footer>
   </div>
 </template>
 

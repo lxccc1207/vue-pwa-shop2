@@ -23,6 +23,9 @@
                 <a href=":;">
                   商业合作
                 </a>
+                <router-link to="/adminIndex">
+                  管理员登录
+                </router-link>
               </div>
             </div>
           </div>

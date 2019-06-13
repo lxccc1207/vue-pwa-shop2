@@ -11,6 +11,8 @@ const GoodsDetails = () => import ('../page/GoodsDetails')
 const Checkout = () => import ('../page/Checkout')
 const About = () => import ('../components/About')
 const Contact = () => import ('../components/Contact')
+// const login = () =>import ('../admin/adminPages/login')
+const index = () => import('../admin/adminPages/index')
 import store from '../store/index.js'
 Vue.use(Router)
 
@@ -76,6 +78,21 @@ export default new Router({
       path: '/checkout',
       name: 'Checkout',
       component: Checkout
+    },
+    {
+      path: '/adminIndex',
+      name: 'adminIndex',
+      component: index,
+      redirect:'/adminIndex/goodsList',
+      children:[{
+        path:'/adminIndex/goodsList',
+        name:'goodsList',
+        component: () => import('../admin/adminComponents/goodsList')
+      }, {
+        path: '/adminIndex/addGoods',
+        name: 'addGoods',
+        component: () => import('../admin/adminComponents/addGoods')
+        }]
     }
   ]
 })

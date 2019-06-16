@@ -1046,7 +1046,7 @@ html {
     -webkit-transform: none;
     -ms-transform: none;
     transform: none;
-    margin-top: 50px;
+    /* margin-top: 50px; */
   }
 
   .footer__secondary__nav span,

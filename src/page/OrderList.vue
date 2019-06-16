@@ -26,7 +26,7 @@
               <div class="cart">
                 <div class="cart-l" :class="bt">
                   <div class="car-l-l">         
-                    <div class="img-box"><a><img  v-lazy="`static/${item.productImg}`" alt=""></a></div>
+                    <div class="img-box"><a><img :src="`static/${item.productImg}`" alt=""></a></div>
                     <div class="ellipsis"><a style="color: #626262;"></a></div>
                     <div class="orderlistId">{{item.orderId}}</div>
                     <div class="productName">{{item.productName}}</div>
@@ -133,23 +133,45 @@ import $ from 'jquery'
           res = res.data;
           if(res.status === '1') {
             this.orderList = res.result;
+            // console.log("getOrderData:")
             console.log(this.orderList);
           }
         });
       },
       delOrderList(item) {
-        var index = this.orderList.indexOf(item);
-        var param = {
-          orderId:item.orderId
-        };
-        axios.get('/api/users/delOrder', {
-          params:param
-        }).then((res) => {
-          res = res.data;
-          if(res.status === '1') {
-            this.orderList.splice(index, 1);
-          }
-        });
+        this.$confirm('确认删除订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var index = this.orderList.indexOf(item);
+          var param = {
+            orderId:item.orderId
+          };
+          axios.get('/api/users/delOrder', {
+            params:param
+          }).then((res) => {
+            res = res.data;
+            if(res.status === '1') {
+              this.orderList.splice(index, 1);
+              this.getOrderData();
+              this.$message({
+                type: 'success',
+                message: '删除订单成功!'
+              })
+            } else {
+              this.$message({
+              type: 'error',
+              messaga: '订单删除失败！'
+              })
+            }
+          }).catch(() => {
+            this.$message({
+              type: 'error',
+              messaga: '订单删除失败！'
+            })
+          })  
+        })    
       },
       payOrder(item) {
         this.mdShow = true;
@@ -264,7 +286,7 @@ import $ from 'jquery'
       text-align: center;
       display: flex;
       border-left: 1px solid #ccc;
-      @media screen and (max-width: 520px) {
+      @media screen and (max-width: 600px) {
       // position:absolute;
       // top:270px;
       // z-index:99;
@@ -395,7 +417,7 @@ import $ from 'jquery'
     position:absolute; 
     right: 0;
     top: 0;
-    @media screen and (max-width: 520px) {
+    @media screen and (max-width: 600px) {
       // position: absolute;
       // top:180px;
       // left: 0;

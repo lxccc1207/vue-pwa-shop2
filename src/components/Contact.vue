@@ -101,19 +101,21 @@ import axios from 'axios'
     margin:20px
 .content
   display :flex
-  @media screen and (max-width :1023px){
-    flex-direction :column 
-  }
+  // @media screen and (max-width :1023px){
+  flex-direction :column 
+  // }
 .table-left
-  width:500px
-  margin:4px 20px 0 100px
-  @media screen and (max-width :1023px){
-    margin:0 auto
-  }
+  // max-width:500px
+  width:100vw
+  // margin:4px 20px 0 100px
+  // @media screen and (max-width :1023px){
+  margin:0 auto
+  // }
   .public
-    width:520px
+    max-width:520px
     height :230px
     position :relative
+    margin:0 auto
     @media screen and (max-width :1023px){
       width:100vw
     }
@@ -136,16 +138,16 @@ import axios from 'axios'
       font-size :20px
       font-weight:700
 .table-right
-  width:500px
+  width:100vw
   flex:1
   position :relative
   @media screen and (min-width :1023px){
     padding-left:60px
   }
-  @media screen and (max-width :1023px){
-    min-height :660px
-    margin:0 auto
-  }
+  // @media screen and (max-width :1023px){
+  min-height :660px
+  margin:0 auto
+  // }
   .table-right-span
     position :absolute
     top:20px
@@ -159,9 +161,9 @@ import axios from 'axios'
     position :absolute
     top:65px
     width:70%
-    @media screen and (max-width :360px){
-      width:50%
-    }
+    // @media screen and (max-width :360px){
+    //   width:50%
+    // }
     height:100%
     @media screen and (max-width :1023px){
       display :flex

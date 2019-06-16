@@ -5,28 +5,22 @@
     <div ref="gray"  class="gray-box">
       <div class="gallery-wrapper">
         <div ref="gallery" class="gallery">
+          <!--下面-->
           <div class="thumbnail">
             <ul v-if="List && List.goodsimages">
-              <li v-for="(item, index) in List.goodsimages" :key="index" :class="{on:big===index}" @click="big=index">
+              <li v-for="(item, index) in List.goodsimages" :key="index" :class="{on:big===index}" @click="getIndex(item.src, index)">
                 <img v-lazy="`static/goodsImages/${item.src}`" :alt="List.goodsList[0].productName">
               </li>
               <!-- <li :class="{on:big===2}" @click="big=2">
                 <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
-              </li>
-              <li :class="{on:big===3}" @click="big=3">
-                <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
-              </li>
-              <li :class="{on:big===4}" @click="big=4">
-                <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
-              </li>
-              <li :class="{on:big===5}" @click="big=5">
-                <img v-lazy="`static/${item.productImg}`" :alt="item.productName">
               </li> -->
             </ul>
           </div>
+          <!--上面-->
           <div class="thumb">
-            <div v-if="List && List.goodsList" class="big">
-              <img v-lazy="`static/${List.goodsList[0].productImg}`" :alt="List.goodsList[0].productName">
+            <div class="big">
+              <!-- <img v-lazy="`static/${List.goodsList[0].productImg}`" :alt="List.goodsList[0].productName"> -->
+              <img :src="`static/${ImgUrl}`">
             </div>
           </div>
         </div>
@@ -43,7 +37,8 @@
         </div>
         <div v-if="List && List.goodsList" class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum" :limit="Number(List.goodsList[0].limit_num)"></buy-num>
+          <el-input-number size="mini" v-model="num" @change="handleChange" :min="1" :max="List.goodsList[0].limit_num"></el-input-number>
+          <!-- <buy-num @edit-num="editNum" :limit="Number(List.goodsList[0].limit_num)"></buy-num> -->
         </div>
         <div v-if="List && List.goodsList" class="buy">
           <y-button text="加入购物车"
@@ -94,10 +89,12 @@
   export default {
     data () {
       return {
+        ImgUrl:'',
         mainImage: '',
+        num: 1,
         small: [],
         List:[],
-        big: 1,
+        big: null,
         product: {},
         productNum: 1,
         userId: '',
@@ -110,12 +107,11 @@
     computed: {
       // ...mapState(['login', 'showMoveImg', 'showCart'])
     },
-    mounted() {
-      this.getdata();
-     
+    mounted() {              
+      this.getdata()
     },
     updated() {
-       this.calHeight();
+      this.calHeight();
     },
     methods: {
       getdata(){
@@ -131,8 +127,16 @@
           if(res.status === '1') {
             this.List = res.result;
             console.log(this.List);
+            this.ImgUrl = this.List.goodsList[0].productImg // 默认展开的大图
           }
         });
+      },
+      getIndex(src, index) {
+        this.big = index
+        this.ImgUrl = 'goodsImages/' + src
+      },
+      handleChange(num) {
+        this.productNum = num
       },
       calHeight(){
         var clientWidth = document.body.clientWidth;
@@ -150,7 +154,7 @@
         }
       },
       editNum (num) {
-        this.productNum = num
+        // this.productNum = num
         //console.log(this.productNum);
       },
       addCart(value) {
@@ -202,15 +206,15 @@
             if(res.status === '1') {
                   axios.post('/api/buynow',{
                     params:{
-                      productId:item.productId //传给后台用于查询
+                      productId:item.productId, //传给后台用于查询
+                      productNum:this.productNum
                     }
                 }).then((res)=>{
                     res=res.data
-                    //console.log(res)
                     var setdata = {
                       productName:res.productName,
                       productPrice:res.productPrice,
-                      productNum:res.productNum,
+                      productNum:this.productNum,
                       productImg:res.productImg,
                       productId:item.productId,
                       userId:res.userId
@@ -255,7 +259,7 @@
   @import '../assets/css/detailmobile.css';
   .store-content {
     clear: both;
-    width: 1220px;
+    // width: 1220px;
     min-height: 600px;
     padding: 0 0 25px;
     margin: 0 auto;

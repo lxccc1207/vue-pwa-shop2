@@ -103,7 +103,7 @@ export default new Vuex.Store({
 		updatebuynowlist(state,data){
 				state.buynowlist.splice(0,1)
 				state.buynowlist.push(data)
-				state.buynowlist[0].productNum=1
+				// state.buynowlist[0].productNum=1
 
 		},
 		deleteAllCartList(state,data){

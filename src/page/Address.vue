@@ -144,6 +144,19 @@ import axios from 'axios'
             newAddressList:[]
           }
       },
+      beforeRouteLeave (to, from, next) {
+        if (this.addressData.length < 1) {
+          alert("收货地址不能为空！")
+        } else if (this.addressData.length === 1) {
+          if(this.addressData[0].isDefault === 0) {
+            alert("请双击选择默认收货地址！")
+          } else {
+            next()
+          }
+        } else {
+          next()
+        }
+      },
       mounted() {
         this.getAddressList();
       },
@@ -222,6 +235,7 @@ import axios from 'axios'
             this.mdShow = false;
         },
         setDefault(item) {
+          this.getAddressList()
           this.addressData.forEach((list, index) => {
             if(item==list.addressId){
               list.isDefault=1;

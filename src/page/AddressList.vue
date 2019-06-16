@@ -195,6 +195,7 @@ import axios from 'axios'
             this.mdShow = false;
         },
         setDefault(item) {
+          this.getAddressList()
           this.addressData.forEach((list, index) => {
             if(item==list.addressId){
               list.isDefault=1;
